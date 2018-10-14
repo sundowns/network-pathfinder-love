@@ -65,14 +65,14 @@ function deepprint(table, depth)
       print(spacer.."[" .. tostring(k) .. "]: " .. tostring(v))
     end
   end
-  for i, v in ipairs(table) do
-    if type(v) == "table" then
-      print(spacer.."["..i.."]:")
-      deepprint(v, d + 1)
-    else
-      print(spacer.."[" .. tostring(i) .. "]: " .. tostring(v))
-    end
-  end
+  -- for i, v in ipairs(table) do
+  --   if type(v) == "table" then
+  --     print(spacer.."["..i.."]:")
+  --     deepprint(v, d + 1)
+  --   else
+  --     print(spacer.."[" .. tostring(i) .. "]: " .. tostring(v))
+  --   end
+  -- end
 end
 
 function util.table.concat(t1,t2)
