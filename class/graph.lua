@@ -1,3 +1,5 @@
+
+
 Graph = Class {
     init = function(self, nodeCount, directed)
         self.nodes = {}
@@ -7,6 +9,7 @@ Graph = Class {
         self.nodeCount = nodeCount
         self.NODES_PER_COL = math.ceil(math.sqrt(self.nodeCount))
         self.NODES_PER_ROW = math.ceil(math.sqrt(self.nodeCount))
+        -- self.world = bump.newWorld(constants.NODE_RADIUS)
         for i=1,self.nodeCount do
             self.matrix[i] = {}
             for j=1,self.nodeCount do
@@ -29,6 +32,11 @@ Graph = Class {
             end
         end
     end;
+    update =  function(self, dt)
+        for i, node in pairs(self.nodes) do
+            node:update()
+        end;
+    end;
     draw = function(self)
         love.graphics.setColor(constants.COLOURS.EDGE.DEFAULT)
         for i, edge in pairs(self.edges) do
@@ -36,12 +44,21 @@ Graph = Class {
         end
 
         for i, node in pairs(self.nodes) do
-            love.graphics.setColor(constants.COLOURS.NODE.BG)
+            if node.isHovered then
+                love.graphics.setColor(constants.COLOURS.NODE.BG_HOVERED)
+            else
+                love.graphics.setColor(constants.COLOURS.NODE.BG)
+            end
             love.graphics.circle('fill', node.x, node.y, constants.NODE_RADIUS)
             love.graphics.setColor(constants.COLOURS.NODE.OUTLINE)
             love.graphics.circle('line', node.x, node.y, constants.NODE_RADIUS+1)
             love.graphics.setColor(constants.COLOURS.NODE.LABEL)
             love.graphics.draw(node.label, node.x-node.label:getWidth()/2, node.y-node.label:getHeight()/2)
+
+            if debug then
+                love.graphics.setColor(1,0,0)
+                node.hitbox:draw('fill')
+            end
         end
     end;
     addEdge = function(self, fromId, toId)
@@ -90,6 +107,16 @@ Node = Class {
         self.y = y
         self.label = love.graphics.newText(love.graphics.getFont(), id)
         self.neighbours = {}
+        self.hitbox = HC.circle(x, y, constants.NODE_RADIUS)
+        self.hitbox.node = self
+        self.isHovered = false
+    end;
+    update = function(self)
+        self.isHovered = false
+        self.hitbox:moveTo(self.x, self.y)
+    end;
+    hover = function(self)
+        self.isHovered = true
     end;
 }
 

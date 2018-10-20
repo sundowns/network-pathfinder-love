@@ -125,6 +125,7 @@ function util.maths.clamp(val, min, max)
 end
 
 ---------------------- DEBUG
+debug = false
 
 function util.debug.log(text)
     if debug then
